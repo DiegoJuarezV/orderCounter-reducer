@@ -3,11 +3,14 @@ import { menuItems } from "../data/db";
 import Menu from "./Menu";
 import { MenuItem, OrderItem } from "../types";
 import OrderCounter from "./OrderCounter";
+import OrderTotals from "./OrderTotals";
+import TipForm from "./TipForm";
 
 
 const Home = ()  => {
   const [data] = useState<MenuItem[]>(menuItems);
-  const [cart, setCart] = useState<OrderItem[]>([])
+  const [cart, setCart] = useState<OrderItem[]>([]);
+  const [tip, setTip] = useState(0);
 
   return (
     <main className="max-w-7xl mx-auto py-20 grid md:grid-cols-2">
@@ -25,10 +28,25 @@ const Home = ()  => {
         </div>
       </section>
       <section className="border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
-        <OrderCounter
-          cart={cart}
-          setCart={setCart}
-         />
+        {cart.length ? (
+          <>
+            <OrderCounter
+              cart={cart}
+              setCart={setCart}
+            />
+            <TipForm
+              setTip={setTip} 
+            />    
+            <OrderTotals
+              cart={cart} 
+              tip={tip}
+              setCart={setCart}
+              setTip={setTip}
+            />
+          </>
+        ) : (
+          <p className="text-center">La orden está vacia</p>
+        )}
       </section>
     </main>
   )
