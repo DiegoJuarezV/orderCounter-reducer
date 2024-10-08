@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { menuItems } from "../data/db";
 import Menu from "./Menu";
-import { MenuItem } from "../types";
+import { MenuItem, OrderItem } from "../types";
+import OrderCounter from "./OrderCounter";
 
 
 const Home = ()  => {
   const [data] = useState<MenuItem[]>(menuItems);
+  const [cart, setCart] = useState<OrderItem[]>([])
 
   return (
     <main className="max-w-7xl mx-auto py-20 grid md:grid-cols-2">
@@ -15,14 +17,19 @@ const Home = ()  => {
           {data.map((item) => (
             <Menu 
               key={item.id} 
-              item={item} 
+              item={item}
+              cart={cart}
+              setCart={setCart}
             />
           ))}
         </div>
       </section>
-      <div>
-        <h2>Consumo</h2>
-      </div>
+      <section className="border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
+        <OrderCounter
+          cart={cart}
+          setCart={setCart}
+         />
+      </section>
     </main>
   )
 }
