@@ -1,25 +1,16 @@
-import { MenuItem, OrderItem } from "../types";
+import { CartAction } from "../reducers/order-reducer";
+import { MenuItem } from "../types";
 
 type MenuProps = {
   item: MenuItem
-  cart: OrderItem[]
-  setCart:  React.Dispatch<React.SetStateAction<OrderItem[]>>
+  dispatch: React.Dispatch<CartAction>
 }
 
-const Menu = ({ item, cart, setCart } : MenuProps) => {
-  const { name, price, id } = item;
+const Menu = ({ item, dispatch } : MenuProps) => {
+  const { name, price } = item;
 
   const addCart = () => {
-    const itemExists = cart.find((order) => order.id === id);
-
-    if (itemExists) {
-      setCart((prevCart) => prevCart.map(orderItem =>
-        orderItem.id === id ? { ...orderItem, quantity: orderItem.quantity + 1 } : orderItem
-      ))
-    } else {
-      const newItem: OrderItem = { ...item, quantity: 1 };
-      setCart([ ...cart, newItem ]);
-    }
+    dispatch({ type: 'ADD_CART', payload: { menu: item } })
   }
 
   return (

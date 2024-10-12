@@ -1,3 +1,5 @@
+import { CartAction } from "../reducers/order-reducer"
+
 const tipOptions = [
   {
     id: 'tip-10',
@@ -17,13 +19,14 @@ const tipOptions = [
 ]
 
 type TipFormProps = {
-  setTip: React.Dispatch<React.SetStateAction<number>>
+  dispatch: React.Dispatch<CartAction>
 }
  
-const TipForm = ({ setTip } : TipFormProps) => {
+const TipForm = ({ dispatch } : TipFormProps) => {
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTip(+e.target.value);
+    const tipValue = (+e.target.value);
+    dispatch({ type: 'SET_TIP', payload: { tip: tipValue } })
   }
 
   return (

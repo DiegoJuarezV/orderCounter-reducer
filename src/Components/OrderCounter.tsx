@@ -1,14 +1,14 @@
-import { OrderItem } from "../types";
+import { CartAction, CartState } from "../reducers/order-reducer";
 
 type OrderProps = {
-  cart: OrderItem[]
-  setCart: React.Dispatch<React.SetStateAction<OrderItem[]>>
+  state: CartState
+  dispatch: React.Dispatch<CartAction>
 }
 
-const OrderCounter = ({ cart, setCart } : OrderProps) => {
+const OrderCounter = ({ state, dispatch } : OrderProps) => {
 
   const removeItem = (id: number) => {
-    setCart((prev) => prev.filter(item => item.id !== id))
+    dispatch({ type: 'REMOVE_FROMCART', payload: { id } })
   }
 
   return (
@@ -16,7 +16,7 @@ const OrderCounter = ({ cart, setCart } : OrderProps) => {
       <h2 className="font-black text-4xl">Consumo</h2>
       
       <div className="space-y-3 mt-10">
-        {cart.map(item => (
+        {state.cart.map(item => (
           <div key={item.id} className="flex justify-between items-center border-t border-gray-200 py-5 last-of-type:border-b">
             <div>
               <p className="text-lg">{item.name} - ${item.price}</p>

@@ -1,47 +1,40 @@
-import { useState } from "react";
-import { menuItems } from "../data/db";
 import Menu from "./Menu";
-import { MenuItem, OrderItem } from "../types";
 import OrderCounter from "./OrderCounter";
 import OrderTotals from "./OrderTotals";
 import TipForm from "./TipForm";
-
+import { cartReducer, initialState } from "../reducers/order-reducer";
+import { useReducer } from "react";
 
 const Home = ()  => {
-  const [data] = useState<MenuItem[]>(menuItems);
-  const [cart, setCart] = useState<OrderItem[]>([]);
-  const [tip, setTip] = useState(0);
+  const [state, dispatch] = useReducer(cartReducer, initialState);
 
   return (
     <main className="max-w-7xl mx-auto py-20 grid md:grid-cols-2">
       <section className="p-5">
         <h2 className="text-4xl font-black">Menú</h2>
         <div className="space-y-3 mt-10">
-          {data.map((item) => (
+          {state.data.map((item) => (
             <Menu 
               key={item.id} 
               item={item}
-              cart={cart}
-              setCart={setCart}
+              dispatch={dispatch}
             />
           ))}
         </div>
       </section>
       <section className="border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
-        {cart.length ? (
+        {state.cart.length ? (
           <>
             <OrderCounter
-              cart={cart}
-              setCart={setCart}
+              state={state}
+              dispatch={dispatch}
             />
             <TipForm
-              setTip={setTip} 
+              dispatch={dispatch} 
             />    
             <OrderTotals
-              cart={cart} 
-              tip={tip}
-              setCart={setCart}
-              setTip={setTip}
+              state={state}
+              dispatch={dispatch}
             />
           </>
         ) : (

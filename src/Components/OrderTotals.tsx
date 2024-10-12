@@ -1,21 +1,18 @@
 import { useMemo } from "react";
-import { OrderItem } from "../types";
+import { CartAction, CartState } from "../reducers/order-reducer";
 
 type OrderTotalsProps = {
-  cart: OrderItem[]
-  tip: number
-  setCart: React.Dispatch<React.SetStateAction<OrderItem[]>>
-  setTip: React.Dispatch<React.SetStateAction<number>>
+  state: CartState
+  dispatch: React.Dispatch<CartAction>
 }
 
-const OrderTotals = ({ cart, tip, setCart, setTip } : OrderTotalsProps) => {
-  const subtotalAmount = useMemo(() => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);
-  const tipAmount = useMemo(() => subtotalAmount * tip, [tip, cart]);
-  const totalAmount = useMemo(() => subtotalAmount + tipAmount , [tip, cart]);
+const OrderTotals = ({ state, dispatch } : OrderTotalsProps) => {
+  const subtotalAmount = useMemo(() => state.cart.reduce((total, item) => total + (item.quantity * item.price), 0), [state.cart]);
+  const tipAmount = useMemo(() => subtotalAmount * state.tip, [state.tip, state.cart]);
+  const totalAmount = useMemo(() => subtotalAmount + tipAmount , [state.tip, state.cart]);
 
   const saveOrder = () => {
-    setCart([]);
-    setTip(0);
+    dispatch({ type: 'SAVE_ORDER' })
   }
 
   return (
