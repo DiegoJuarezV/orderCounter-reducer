@@ -19,21 +19,14 @@ export const initialState = {
   tip: 0
 }
 
-let updatedCart: OrderItem[] = []
-
 export const cartReducer = (state: CartState = initialState, action: CartAction) => {
   switch (action.type) {
     case "ADD_CART": {
       const itemExists = state.cart.find((order) => order.id === action.payload.menu.id);
-      if (itemExists) {
-        updatedCart = state.cart.map((orderItem) =>
-          orderItem.id === action.payload.menu.id ? { ...orderItem, quantity: orderItem.quantity + 1 } : orderItem 
-        )
-      } else {
-        const newItem: OrderItem = { ...action.payload.menu, quantity: 1 }
-        updatedCart = [ ...state.cart, newItem ]
-      }
-      return { ...state, cart: updatedCart } 
+      const updatedCart = itemExists ? state.cart.map((orderItem) =>
+        orderItem.id === action.payload.menu.id ? { ...orderItem, quantity: orderItem.quantity + 1 } : orderItem 
+      ) : [ ...state.cart, { ...action.payload.menu, quantity: 1 }]
+      return { ...state, cart: updatedCart }
     }
     case "REMOVE_FROMCART": {
       const filteredItems = state.cart.filter((item) => item.id !== action.payload.id);
